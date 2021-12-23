@@ -1,22 +1,45 @@
 <template>
   <div id="app">
-    <label>
-      Nom de la tâche
-    </label>
-    <input type="text" name="new-tache" v-model="nomTache" />
-    <ajouterBouton class="btnAjouter" @ajouterTache="ajouter"/>
 
-    <h2>Tâches :</h2>
-    <ul>
-      <li v-for="(tache, index) in taches" :key="tache.name"><input type="checkbox" v-model="tache.checked"/> 
-      <div :class="{termine: tache.checked}">{{ tache.name }}</div>
-      <button @click="supprimer(index)" class="btnSupprimer">Supprimer</button></li>
-    </ul>
+    <TodoListLayout>
+      <template #header="{ appName }">
+        <h1>{{ appName }}</h1>
+      </template>
+
+      <template #main>
+        <label>
+          Nom de la tâche
+        </label>
+        <input type="text" name="new-tache" v-model="nomTache" @keydown.enter="ajouter" />
+        <AjouterBouton class="btnAjouter" @ajouterTache="ajouter">
+          Ajouter
+        </AjouterBouton>
+
+        <h2>Tâches :</h2>
+        <ul>
+          <li v-for="(tache, index) in taches" :key="tache.name">
+            <input type="checkbox" v-model="tache.checked"/> 
+            <div :class="{termine: tache.checked}">{{ tache.name }}</div>
+            <button @click="supprimer(index)" class="btnSupprimer">Supprimer</button>
+          </li>
+        </ul>
+      </template>
+
+      <template #footer>
+        <CustomInput label="Mon label custom" v-model="maData" ></CustomInput>
+        Voici maData : {{ maData }}<br/>
+
+        Ceci est le footer
+      </template>
+    </TodoListLayout>
+
   </div>
 </template>
 
 <script>
-import ajouterBouton from "./components/AjouterBouton.vue"
+import TodoListLayout from "./components/TodoListLayout.vue" 
+import AjouterBouton from "./components/AjouterBouton.vue"
+import CustomInput from "./components/CustomInput.vue"
 
 export default {
   name: 'App',
@@ -25,15 +48,19 @@ export default {
       check: "",
       nomTache: "",
       newTache: {name: "", checked: ""},
-      taches: []
+      taches: [],
+      maData: "valeur par défaut",
     }
   },
   components: {
-    ajouterBouton,
+    TodoListLayout,
+    AjouterBouton,
+    CustomInput,
   },
   methods: {
     ajouter(){
       this.taches.push({name: this.nomTache, checked: ""})
+      this.nomTache = ""
     },
     supprimer(index){
       this.taches.splice(index,1)

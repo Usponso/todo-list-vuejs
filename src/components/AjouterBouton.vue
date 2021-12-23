@@ -1,5 +1,7 @@
 <template>
-    <button @click="emitAjouter">Ajouter</button>
+    <button @click="emitAjouter">
+        <slot>Action</slot>
+    </button>
 </template>
 
 <script>
@@ -13,7 +15,3 @@ export default{
 }
 
 </script>
-
-<style>
-
-</style>
